@@ -152,8 +152,8 @@ class SensorAPI(object):
         formatted_time = strftime("%Y-%m-%d %H:%M:%S", localtime())
         msg = str(formatted_time) + "," +str(value) + "\n"
 
-        with open(filename, "a") as file:
-            file.write(msg)
+        #with open(filename, "a") as file:
+        #    file.write(msg)
 
     def log_action(self, text):
         filename = "./logs/action.log"
