@@ -4,6 +4,7 @@ from modules import cbpi
 
 try:
     import RPi.GPIO as GPIO
+    import wiringpi
 except Exception as e:
     pass
 
@@ -13,10 +14,13 @@ class Buzzer(object):
     def __init__(self, gpio, beep_level):
         try:
             cbpi.app.logger.info("INIT BUZZER NOW GPIO%s" % gpio)
-            self.gpio = int(gpio)
+            #self.gpio = int(gpio)
+            self.gpio=27
             self.beep_level = beep_level
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setup(self.gpio, GPIO.OUT)
+            wiringpi.wiringPiSetup()
+            wiringpi.softToneCreate(self.gpio)
+            #GPIO.setmode(GPIO.BCM)
+            #GPIO.setup(self.gpio, GPIO.OUT)
             self.state = True
             cbpi.app.logger.info("BUZZER SETUP OK")
         except Exception as e:
@@ -33,13 +37,17 @@ class Buzzer(object):
                 for i in sound:
                     if (isinstance(i, str)):
                         if i == "H" and self.beep_level == "HIGH":
-                            GPIO.output(int(self.gpio), GPIO.HIGH)
+                           # GPIO.output(int(self.gpio), GPIO.HIGH)
+                            wiringpi.softToneWrite(self.gpio, 1000);
                         elif i == "H" and self.beep_level != "HIGH":
-                            GPIO.output(int(self.gpio), GPIO.LOW)
+                           # GPIO.output(int(self.gpio), GPIO.LOW)
+                            wiringpi.softToneWrite(self.gpio, 0);
                         elif i == "L" and self.beep_level == "HIGH":
-                            GPIO.output(int(self.gpio), GPIO.LOW)
+                           # GPIO.output(int(self.gpio), GPIO.LOW)
+                            wiringpi.softToneWrite(self.gpio, 0);
                         else:
-                            GPIO.output(int(self.gpio), GPIO.HIGH)
+                            #GPIO.output(int(self.gpio), GPIO.HIGH)
+                            wiringpi.softToneWrite(self.gpio, 1000);
                     else:
                         time.sleep(i)
             except Exception as e:
