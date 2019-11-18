@@ -55,8 +55,10 @@ class myThread (threading.Thread):
                 with open('/sys/bus/w1/devices/w1_bus_master1/%s/w1_slave' % self.sensor_name, 'r') as content_file:
                     content = content_file.read()
                     if (content.split('\n')[0].split(' ')[11] == "YES"):
-                        temp = float(content.split("=")[-1]) / 1000  # temp in Celcius
-                        self.value = temp
+                        val = int(content.split("=")[-1]);
+                        if (val != 85000):
+                            temp = float(val) / 1000  # temp in Celcius
+                            self.value = temp
             except:
                 pass
 
